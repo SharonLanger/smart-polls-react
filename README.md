@@ -1,0 +1,1 @@
+# smart-polls-react
