@@ -1,0 +1,33 @@
+.component-menu {
+  background-color: aqua;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 100%;
+  width: max-content;
+}
+.component-app {
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: border-box;
+}
+
+.component-header {
+  font-size: x-small;
+  background-color: darkslategray;
+  display: inline;
+  flex-direction: row;
+  flex-wrap: initial;
+  height: auto;
+  width: max-content;
+}
+
+.component-poll-header {
+  font-size: x-large;
+  background-color: lightpink;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}

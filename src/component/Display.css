@@ -1,0 +1,33 @@
+.component-display {
+  background-color: white;
+  color: black;
+  text-align: left;
+  font-weight: 200;
+  /*flex: 0 0 auto;*/
+  width: 100%;
+}
+
+.component-display > div {
+  font-size: medium;
+  text-align: left;
+  padding: 0.2rem 0.7rem 0.1rem 0.5rem;
+}
+
+.component-user-login {
+  font-size: x-large;
+  text-align: left;
+}
+.component-user-register {
+  font-size: x-large;
+  text-align: left;
+}
+
+.component-group-admin {
+  font-size: x-large;
+  text-align: left;
+}
+
+.component-new-poll {
+  font-size: medium;
+  text-align: left;
+}
