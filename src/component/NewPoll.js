@@ -43,9 +43,9 @@ export default class NewPoll extends React.Component {
 
     }
 
-    // Checking if the user is the admin of a list of groups
-    // A user can't create a poll to groups he isn't the admin of
-    async isUserNameAdminForGroupList(groupsList) {
+    // Checking if the user is the admin of a group
+    // A user can't create a poll to group/s he isn't the admin of
+    async isUserNameAdminForGroup(group_id) {
         let axios = require('axios');
         let data = '';
         console.log("this.user_logged:" + this.user_logged)
@@ -56,16 +56,16 @@ export default class NewPoll extends React.Component {
 
         let config = {
             method: 'get',
-            url: url_admin + '/is_user_name_admin_for_group_list?user_name=' + this.user_logged + "&groups_list=" + groupsList,
+            url: url_admin + '/is_user_name_admin_for_group?user_name=' + this.user_logged + "&group_id=" + group_id,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/vnd.api+json'
             },
             data: data
         };
 
         let r = await axios(config)
             .then(function (response) {
-                console.log("isUserNameAdminForGroupList\nresponse from backend:");
+                console.log("isUserNameAdminForGroup\nresponse from backend:");
                 console.log(JSON_stringify(response.data));
                 return response.data;
             })
@@ -97,7 +97,7 @@ export default class NewPoll extends React.Component {
             method: 'post',
             url: url_polls + "/polls",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/vnd.api+json'
             },
             data: data
         };
@@ -128,10 +128,12 @@ export default class NewPoll extends React.Component {
     handleSubmitNewPoll = async () => {
         // Updating the state
         this.setState(this.updatePollValues())
-        if (!await this.isUserNameAdminForGroupList(this.state.groups)) {
-            // Alerting the user is he can't create the poll dou to missing roles
-            alert("You are not authorize to poll one or more of the groups")
-            return []
+        for ( const itr of this.state.groups.split('&')) {
+            if (!await this.isUserNameAdminForGroup(itr)) {
+                // Alerting the user is he can't create the poll because of missing roles
+                alert("You are not authorize to poll the group: " + itr)
+                return []
+            }
         }
 
 

@@ -50,7 +50,7 @@ export default class GroupAdmin extends React.Component {
             method: 'post',
             url: url_admin + '/admins',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/vnd.api+json'
             },
             data : JSON.stringify(data)
         };
@@ -75,7 +75,7 @@ export default class GroupAdmin extends React.Component {
             method: 'get',
             url: url_group_users + '/get_group_users?group_id=' + group_id,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/vnd.api+json'
             },
             data: data
         };
@@ -102,7 +102,7 @@ export default class GroupAdmin extends React.Component {
             method: 'get',
             url: url_admin + '/get_group_admins?group_id=' + group_id,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/vnd.api+json'
             },
             data: data
         };
@@ -129,7 +129,7 @@ export default class GroupAdmin extends React.Component {
             method: 'get',
             url: url_admin + '/get_user_admin_groups?user_name=' + user_name,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/vnd.api+json'
             },
             data: data
         };

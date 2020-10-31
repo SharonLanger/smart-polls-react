@@ -43,7 +43,7 @@ export default class User extends React.Component {
             method: 'post',
             url: url_users + '/insert_user?' + params,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/vnd.api+json'
             },
             data: ''
         };
@@ -78,7 +78,7 @@ export default class User extends React.Component {
             method: 'get',
             url: url_users + '/login_user?user_name=' + userName + '&password=' + password,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/vnd.api+json'
             },
             data : data
         };

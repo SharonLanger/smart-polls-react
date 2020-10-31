@@ -54,7 +54,7 @@ export default class Polls extends React.Component {
 
     sendToTelegram = async () => {
         if (!await this.checkIfUserIsAdmin()) {
-            alert("You are not an admin of all the poll groups");
+            // alert("You are not an admin of all the poll groups");
             return;
         }
 
@@ -97,7 +97,7 @@ export default class Polls extends React.Component {
                 + '&answer=' + this.state.poll_group_options_selected
                 + '&name=' + this.state.group_name,
             'headers': {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/vnd.api+json'
             }
         };
         request(options, function (error, response) {
@@ -123,7 +123,7 @@ export default class Polls extends React.Component {
                 + '&answer=' + this.state.poll_answer_selected
                 + '&user_name=' + this.user_logged,
             'headers': {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/vnd.api+json'
             }
         };
         request(options, function (error, response) {
@@ -135,6 +135,39 @@ export default class Polls extends React.Component {
         // Changing the loaded poll chart data after the user answered
         await this.handleSubmitPollId();
     }
+
+    // Return the poll groups.
+    // A list of groups that the poll is polling
+    async getPollIdGroupsList() {
+        let axios = require('axios');
+        let data = '';
+        console.log("this.user_logged:" + this.user_logged)
+        if (!this.user_logged) {
+            alert("Please Login")
+            return false
+        }
+
+        let config = {
+            method: 'get',
+            url: url_polls + '/polls/' + this.state.poll_id_dropdown,
+            headers: {
+                'Content-Type': 'application/vnd.api+json'
+            },
+            data: data
+        };
+
+        let r = await axios(config)
+            .then(function (response) {
+                console.log("getPollIdGroupsList\nresponse from backend:");
+                console.log(JSON_stringify(response.data.data.attributes.groups_id));
+                return response.data.data.attributes.groups_id;
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
+        return r;
+    }
+
 
     // Loading the polls that the user is a member of the poll groups
     async getUserPollIdsList() {
@@ -150,7 +183,7 @@ export default class Polls extends React.Component {
             method: 'get',
             url: url_polls + '/get_user_polls?user_name=' + this.user_logged,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/vnd.api+json'
             },
             data: data
         };
@@ -182,7 +215,7 @@ export default class Polls extends React.Component {
             method: 'get',
             url: url_polls + '/get_poll_data?poll_id=' + poll_id,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/vnd.api+json'
             },
             data: data
         };
@@ -209,7 +242,7 @@ export default class Polls extends React.Component {
             method: 'get',
             url: url_polls + '/get_poll_options?poll_id=' + poll_id,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/vnd.api+json'
             },
             data: data
         };
@@ -240,7 +273,7 @@ export default class Polls extends React.Component {
             method: 'get',
             url: url_answer + '/get_user_answer_to_poll?' + params,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/vnd.api+json'
             },
             data: data
         };
@@ -371,18 +404,40 @@ export default class Polls extends React.Component {
     async checkIfUserIsAdmin() {
         const groupAdmin = new GroupAdmin();
         const newPoll = new NewPoll();
-        let user_groups_admin = await groupAdmin.getGroupsList(this.user_logged);
-        let user_groups_admin_str = ""
-        user_groups_admin.forEach( (itr) => {
-            console.log(itr)
-            if (itr.group_id !== -1) {
-                console.log(itr.group_id)
-                user_groups_admin_str +=  (itr.group_id);
+        // let user_groups_admin = await groupAdmin.getGroupsList(this.user_logged);
+        // let user_groups_admin_str = ""
+        // user_groups_admin.forEach( (itr) => {
+        //     console.log(itr)
+        //     if (itr.group_id !== -1) {
+        //         console.log(itr.group_id)
+        //         if ( user_groups_admin_str.length !== 0) {
+        //             user_groups_admin_str +=  "&";
+        //         }
+        //         user_groups_admin_str +=  (itr.group_id);
+        //     }
+        // })
 
+
+        // This should be the list of poll groups
+        // This should be the list of poll groups
+        // This should be the list of poll groups
+        // This should be the list of poll groups
+
+        const poll_groups = await this.getPollIdGroupsList()
+        if ( !poll_groups ) {
+            return
+        }
+        for ( const itr of poll_groups.split('&')) {
+            if (!await newPoll.isUserNameAdminForGroup(itr)) {
+                // Alerting the user he isn't group admin
+                alert("You are not a group-admin of: " + itr)
+                return false
             }
-        })
-        console.error(JSON_stringify(user_groups_admin_str))
-        return newPoll.isUserNameAdminForGroupList(user_groups_admin_str)
+        }
+        return true
+        // console.log("poll_groups:")
+        // console.log(JSON_stringify(poll_groups))
+        // return newPoll.isUserNameAdminForGroup(poll_groups)
     }
 
     render() {
